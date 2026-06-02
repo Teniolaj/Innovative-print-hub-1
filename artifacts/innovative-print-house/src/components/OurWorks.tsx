@@ -1,21 +1,15 @@
 import { motion } from "framer-motion";
 import { Search, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-import workBanner from "../assets/images/work-banner.png";
-import workTshirt from "../assets/images/work-tshirt.png";
-import workBranding from "../assets/images/work-branding.png";
-import workDiary from "../assets/images/work-diary.png";
-import workSouvenir from "../assets/images/work-souvenir.png";
-import workDesign from "../assets/images/work-design.png";
+import { Link } from "wouter";
 
 const works = [
-  { id: 1, title: "Billboard Design", category: "Graphic Design", image: workBanner },
-  { id: 2, title: "Custom T-shirt Print", category: "Apparel", image: workTshirt },
-  { id: 3, title: "Corporate Identity", category: "Branding", image: workBranding },
-  { id: 4, title: "Premium Diary", category: "Corporate Gifts", image: workDiary },
-  { id: 5, title: "Branded Souvenir", category: "Gift Items", image: workSouvenir },
-  { id: 6, title: "Digital Concept", category: "Graphic Design", image: workDesign },
+  { id: 1, title: "Premium Corporate Hoodies", category: "Apparel", image: "/works/print-work-1.jpg" },
+  { id: 2, title: "Large Format Banners", category: "Graphic Design", image: "/works/print-work-2.jpg" },
+  { id: 3, title: "Sleek Business Cards & Stationery", category: "Branding", image: "/works/print-work-3.jpg" },
+  { id: 4, title: "Eco-Friendly Tote Bags", category: "Packaging", image: "/works/print-work-4.jpg" },
+  { id: 5, title: "Custom Printed Mugs", category: "Corporate Gifts", image: "/works/print-work-5.jpg" },
+  { id: 6, title: "Exclusive Hardcover Notebooks", category: "Corporate Gifts", image: "/works/print-work-6.jpg" },
 ];
 
 export default function OurWorks() {
@@ -36,14 +30,15 @@ export default function OurWorks() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Button
-              data-testid="button-view-more-works"
-              className="bg-primary text-black hover:bg-primary/90 font-bold px-6 h-12 flex items-center gap-2 whitespace-nowrap"
-              onClick={() => document.querySelector("#quote")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              View More Works
-              <ArrowRight size={18} />
-            </Button>
+            <Link href="/works">
+              <Button
+                data-testid="button-view-more-works"
+                className="bg-primary text-black hover:bg-primary/90 font-bold px-6 h-12 flex items-center gap-2 whitespace-nowrap"
+              >
+                View More Works
+                <ArrowRight size={18} />
+              </Button>
+            </Link>
           </motion.div>
         </div>
 
@@ -70,12 +65,14 @@ export default function OurWorks() {
                   <h3 className="text-xl font-bold text-white mb-2">
                     {work.title}
                   </h3>
-                  <button
-                    data-testid={`button-work-view-${work.id}`}
-                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-colors backdrop-blur-sm mt-4"
-                  >
-                    <Search size={18} />
-                  </button>
+                  <Link href="/works">
+                    <button
+                      data-testid={`button-work-view-${work.id}`}
+                      className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-colors backdrop-blur-sm mt-4 cursor-pointer"
+                    >
+                      <Search size={18} />
+                    </button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
@@ -89,15 +86,16 @@ export default function OurWorks() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex justify-center mt-12"
         >
-          <Button
-            data-testid="button-view-more-works-bottom"
-            variant="outline"
-            className="border-primary/40 text-primary hover:bg-primary hover:text-black font-bold px-10 h-13 flex items-center gap-2 text-base"
-            onClick={() => document.querySelector("#quote")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            View More of Our Works
-            <ArrowRight size={18} />
-          </Button>
+          <Link href="/works">
+            <Button
+              data-testid="button-view-more-works-bottom"
+              variant="outline"
+              className="border-primary/40 text-primary hover:bg-primary hover:text-black font-bold px-10 h-13 flex items-center gap-2 text-base"
+            >
+              View More of Our Works
+              <ArrowRight size={18} />
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

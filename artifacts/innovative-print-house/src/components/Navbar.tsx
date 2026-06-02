@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 import logoPath from "@assets/logo_1778860608571.jpg";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,11 +27,32 @@ export default function Navbar() {
 
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
+    if (location !== "/") {
+      setLocation("/");
+      window.location.hash = href;
+      setMobileMenuOpen(false);
+      return;
+    }
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });
+      window.location.hash = href;
       setMobileMenuOpen(false);
     }
+  };
+
+  const handleGetQuote = () => {
+    if (location !== "/") {
+      setLocation("/");
+      window.location.hash = "#quote";
+    } else {
+      const target = document.querySelector("#quote");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+        window.location.hash = "#quote";
+      }
+    }
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -39,7 +62,7 @@ export default function Navbar() {
       }`}
     >
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-        <a href="#home" onClick={(e) => handleScrollTo(e, "#home")} className="flex items-center gap-3 group">
+        <a href="/" onClick={(e) => handleScrollTo(e, "#home")} className="flex items-center gap-3 group">
           <img
             src={logoPath}
             alt="Innovative Print House Logo"
@@ -63,7 +86,7 @@ export default function Navbar() {
             ))}
           </ul>
           <Button
-            onClick={() => document.querySelector("#quote")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={handleGetQuote}
             className="bg-primary text-primary-foreground font-bold hover:bg-primary/90"
           >
             Get Quote
@@ -97,10 +120,7 @@ export default function Navbar() {
             ))}
           </ul>
           <Button
-            onClick={() => {
-              document.querySelector("#quote")?.scrollIntoView({ behavior: "smooth" });
-              setMobileMenuOpen(false);
-            }}
+            onClick={handleGetQuote}
             className="w-full bg-primary text-primary-foreground font-bold hover:bg-primary/90 mt-2"
           >
             Get Quote
