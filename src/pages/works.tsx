@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Complete list of 8 works using new images from public/works folder
 const allWorks = [
@@ -107,35 +108,51 @@ export default function WorksPage() {
     <div className="flex min-h-[100dvh] flex-col w-full bg-background text-foreground overflow-x-hidden">
       <Navbar />
 
-      <main className="flex-1 w-full pt-28 pb-20">
+      <main className="flex-1 w-full pt-[76px] md:pt-24 pb-20">
         {/* Header Hero Section */}
-        <section className="relative py-16 md:py-24 bg-card/50 border-b border-white/5 overflow-hidden">
+        <section className="relative py-10 md:py-24 bg-card/50 border-b border-white/5 overflow-hidden">
           <div className="absolute inset-0 bg-radial-gradient from-primary/10 via-transparent to-transparent opacity-30" />
-          <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="container mx-auto px-5 md:px-6 relative z-10">
             <Link href="/" className="inline-flex items-center gap-2 text-primary hover:text-white transition-colors mb-6 font-medium group">
               <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
               Back to Home
             </Link>
-            <h1 className="text-4xl md:text-6xl font-black text-white uppercase mb-4 tracking-tight">
+            <h1 className="text-[clamp(1.8rem,8vw,2.5rem)] leading-[1.1] md:text-6xl font-black text-white uppercase mb-4 tracking-tight">
               Our Complete Portfolio
             </h1>
             <div className="w-20 h-1.5 bg-primary mb-6 rounded-full" />
-            <p className="text-gray-400 text-lg max-w-2xl">
+            <p className="text-gray-400 text-base leading-relaxed md:text-lg max-w-2xl">
               Explore our complete collection of printing and branding works. We bring ideas to life with exceptional quality, state-of-the-art technology, and attention to detail.
             </p>
           </div>
         </section>
 
         {/* Filter and Search Section */}
-        <section className="py-12 bg-background">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
+        <section className="py-7 md:py-12 bg-background">
+          <div className="container mx-auto px-5 md:px-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6 mb-5 md:mb-10">
+              <div className="md:hidden">
+                <label htmlFor="work-category" className="mb-2 block text-xs font-medium uppercase tracking-widest text-gray-400">Browse by category</label>
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger id="work-category" className="h-12 rounded-xl border-white/15 bg-card px-4 text-sm font-medium text-white focus:ring-primary [&>svg]:text-primary [&>svg]:opacity-100">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent position="popper" side="bottom" align="start" avoidCollisions={false} sideOffset={6} className="z-[60] max-h-[min(18rem,var(--radix-select-content-available-height))] rounded-xl border-white/15 bg-[#141414] p-1 shadow-2xl">
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat} className="min-h-11 rounded-lg px-3 pr-9 text-sm focus:bg-primary/10 focus:text-primary data-[state=checked]:text-primary">
+                        {cat === "All" ? "All categories" : cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               {/* Category Pills */}
-              <div className="flex flex-wrap gap-2">
+              <div className="hidden md:flex flex-wrap gap-2">
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
+                    aria-pressed={selectedCategory === cat}
                     className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                       selectedCategory === cat
                         ? "bg-primary text-black shadow-lg shadow-primary/20 scale-105"
@@ -151,15 +168,19 @@ export default function WorksPage() {
               <div className="relative max-w-md w-full lg:w-80">
                 <input
                   type="text"
+                  aria-label="Search portfolio works"
                   placeholder="Search works..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-card border border-white/10 rounded-xl px-4 py-3 pl-11 text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all duration-300"
+                  className="h-12 w-full bg-card border border-white/15 rounded-xl px-4 py-3 pl-11 text-base md:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all duration-300"
                 />
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
               </div>
             </div>
 
+            <p role="status" aria-live="polite" className="mb-5 text-xs text-gray-400 md:hidden">
+              {filteredWorks.length} {filteredWorks.length === 1 ? "project" : "projects"}{selectedCategory !== "All" ? ` in ${selectedCategory}` : " to explore"}
+            </p>
             {/* Works Grid */}
             {filteredWorks.length > 0 ? (
               <motion.div
