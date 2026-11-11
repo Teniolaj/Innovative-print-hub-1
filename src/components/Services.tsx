@@ -1,4 +1,5 @@
 import React from "react";
+import SectionHeading from "@/components/SectionHeading";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Briefcase, PenTool, BookOpen, Printer, Shirt, Gift } from "lucide-react";
@@ -68,8 +69,7 @@ export default function Services() {
     <section id="services" className="py-24 bg-card relative z-10 border-y border-white/5">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-white uppercase mb-4 tracking-tight">Our Services</h2>
-          <div className="w-20 h-1.5 bg-primary mx-auto mb-6 rounded-full" />
+          <SectionHeading label="Printing & branding">Our services</SectionHeading>
           <p className="text-gray-400 text-lg">
             From concept to finished product, we provide end-to-end printing and branding solutions with unmatched precision.
           </p>

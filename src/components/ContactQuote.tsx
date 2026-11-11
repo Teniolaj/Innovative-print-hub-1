@@ -1,4 +1,5 @@
 import React from "react";
+import SectionHeading from "@/components/SectionHeading";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -66,8 +67,7 @@ export default function ContactQuote() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-black text-white uppercase mb-4 tracking-tight">Get a Custom Quote</h2>
-            <div className="w-20 h-1.5 bg-primary mx-auto mb-6 rounded-full" />
+            <SectionHeading label="Let's create together">Get a custom quote</SectionHeading>
             <p className="text-gray-400 text-lg">
               Ready to bring your bold ideas to life? Fill out the form below and our team will provide a tailored estimate for your project.
             </p>

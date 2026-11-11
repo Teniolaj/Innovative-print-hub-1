@@ -2,8 +2,11 @@ import { motion } from "framer-motion";
 import { Search, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { latestWorks } from "@/data/latestWorks";
+import SectionHeading from "@/components/SectionHeading";
 
 const works = [
+  ...latestWorks,
   { id: 1, title: "Premium Corporate Hoodies", category: "Apparel", image: "/works/print-work-1.jpg" },
   { id: 2, title: "Large Format Banners", category: "Graphic Design", image: "/works/print-work-2.jpg" },
   { id: 3, title: "Sleek Business Cards & Stationery", category: "Branding", image: "/works/print-work-3.jpg" },
@@ -18,8 +21,7 @@ export default function OurWorks() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-5xl font-black text-white uppercase mb-4 tracking-tight">Our Works</h2>
-            <div className="w-20 h-1.5 bg-primary mb-6 rounded-full" />
+            <SectionHeading label="Selected projects">Our works</SectionHeading>
             <p className="text-gray-400 text-lg">
               A glimpse into the tangible reality we've crafted for our clients. Quality speaks louder than words.
             </p>
@@ -43,7 +45,7 @@ export default function OurWorks() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {works.map((work, idx) => (
+          {works.slice(0, 9).map((work, idx) => (
             <motion.div
               key={work.id}
               initial={{ opacity: 0, scale: 0.95 }}

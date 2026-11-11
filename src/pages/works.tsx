@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { latestWorks } from "@/data/latestWorks";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// Complete list of 8 works using new images from public/works folder
 const allWorks = [
+  ...latestWorks.map((work) => ({ ...work, client: "", date: "" })),
   {
     id: 1,
     title: "Premium Corporate Hoodies",
@@ -117,10 +118,10 @@ export default function WorksPage() {
               <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
               Back to Home
             </Link>
-            <h1 className="text-[clamp(1.8rem,8vw,2.5rem)] leading-[1.1] md:text-6xl font-black text-white uppercase mb-4 tracking-tight">
-              Our Complete Portfolio
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-4">Printing in practice</p>
+            <h1 className="text-3xl md:text-4xl xl:text-5xl font-bold text-white mb-5 tracking-tight leading-[1.15]">
+              Our complete portfolio
             </h1>
-            <div className="w-20 h-1.5 bg-primary mb-6 rounded-full" />
             <p className="text-gray-400 text-base leading-relaxed md:text-lg max-w-2xl">
               Explore our complete collection of printing and branding works. We bring ideas to life with exceptional quality, state-of-the-art technology, and attention to detail.
             </p>
@@ -291,20 +292,20 @@ export default function WorksPage() {
                 </div>
 
                 <div className="space-y-4 pt-6 border-t border-white/10 text-xs">
-                  <div className="flex justify-between items-center text-gray-500">
+                  {activeWork.date && <div className="flex justify-between items-center text-gray-500">
                     <span className="flex items-center gap-1">
                       <Calendar size={12} />
                       Completed
                     </span>
                     <span className="text-white font-medium">{activeWork.date}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-gray-500">
+                  </div>}
+                  {activeWork.client && <div className="flex justify-between items-center text-gray-500">
                     <span className="flex items-center gap-1">
                       <ShieldCheck size={12} />
                       Client
                     </span>
                     <span className="text-white font-medium">{activeWork.client}</span>
-                  </div>
+                  </div>}
                   <Button
                     onClick={() => {
                       setActiveWork(null);
