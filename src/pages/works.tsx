@@ -1,94 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, X, ZoomIn, Calendar, Tag, ShieldCheck } from "lucide-react";
+import { ArrowLeft, X, ZoomIn, Calendar, Tag, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useSearchParams } from "wouter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { latestWorks } from "@/data/latestWorks";
+import { allWorks, workCategories } from "@/data/works";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const allWorks = [
-  ...latestWorks.map((work) => ({ ...work, client: "", date: "" })),
-  {
-    id: 1,
-    title: "Premium Corporate Hoodies",
-    category: "Apparel",
-    image: "/works/print-work-1.jpg",
-    description: "High-density screen printing on premium cotton fabrics. Durable, comfortable, and sharp corporate merchandise.",
-    client: "TechSolutions Ghana",
-    date: "May 2026",
-  },
-  {
-    id: 2,
-    title: "Large Format Exhibition Banners",
-    category: "Graphic Design",
-    image: "/works/print-work-2.jpg",
-    description: "Vibrant and weather-resistant promotional roll-ups and outdoor billboard prints that demand attention.",
-    client: "Global Expo Group",
-    date: "April 2026",
-  },
-  {
-    id: 3,
-    title: "Sleek Business Cards & Stationery",
-    category: "Branding",
-    image: "/works/print-work-3.jpg",
-    description: "Matte-laminated business cards with spot UV finish, letterheads, and customized presentation folders.",
-    client: "Apex Law Chamber",
-    date: "March 2026",
-  },
-  {
-    id: 4,
-    title: "Eco-Friendly Branded Tote Bags",
-    category: "Packaging",
-    image: "/works/print-work-4.jpg",
-    description: "Reusable custom cotton tote bags featuring screen-printed corporate brand identity for eco-conscious campaigns.",
-    client: "GreenEarth Initiative",
-    date: "February 2026",
-  },
-  {
-    id: 5,
-    title: "Custom Printed Mugs & Souvenirs",
-    category: "Corporate Gifts",
-    image: "/works/print-work-5.jpg",
-    description: "Premium sublimation mugs, custom keychains, and laser-engraved pens perfect for corporate events and giveaways.",
-    client: "Consolidated Bank",
-    date: "January 2026",
-  },
-  {
-    id: 6,
-    title: "Exclusive Hardcover Notebooks",
-    category: "Corporate Gifts",
-    image: "/works/print-work-6.jpg",
-    description: "Custom debossed leatherette diaries and hardcover planners with gold foil detailing and silk ribbon markers.",
-    client: "Prime Insurance",
-    date: "December 2025",
-  },
-  {
-    id: 7,
-    title: "Luxury Custom Packaging Boxes",
-    category: "Packaging",
-    image: "/works/print-work-7.jpg",
-    description: "Rigid magnetic closure boxes with custom velvet inserts, matte finishing, and hot foil stamped branding.",
-    client: "Glow Cosmetics",
-    date: "November 2025",
-  },
-  {
-    id: 8,
-    title: "Editorial Magazines & Catalogs",
-    category: "Graphic Design",
-    image: "/works/print-work-8.jpg",
-    description: "Perfect-bound corporate brochures, annual reports, and high-gloss fashion magazines printed in stunning detail.",
-    client: "Vogue West Africa",
-    date: "October 2025",
-  },
-];
-
-const categories = ["All", "Apparel", "Graphic Design", "Branding", "Corporate Gifts", "Packaging"];
+const categories = ["All", ...workCategories];
 
 export default function WorksPage() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedCategory = searchParams.get("category") || "All";
+  const selectedCategory = categories.includes(requestedCategory) ? requestedCategory : "All";
+  const setSelectedCategory = (category: string) => {
+    setSearchParams((params) => {
+      if (category === "All") params.delete("category");
+      else params.set("category", category);
+      return params;
+    }, { replace: true });
+  };
   const [activeWork, setActiveWork] = useState<typeof allWorks[0] | null>(null);
 
   // Scroll to top on page mount
@@ -96,14 +28,9 @@ export default function WorksPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredWorks = allWorks.filter((work) => {
-    const matchesCategory = selectedCategory === "All" || work.category === selectedCategory;
-    const matchesSearch =
-      work.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      work.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      work.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredWorks = allWorks.filter(
+    (work) => selectedCategory === "All" || work.category === selectedCategory
+  );
 
   return (
     <div className="flex min-h-[100dvh] flex-col w-full bg-background text-foreground overflow-x-hidden">
@@ -111,7 +38,7 @@ export default function WorksPage() {
 
       <main className="flex-1 w-full pt-[76px] md:pt-24 pb-20">
         {/* Header Hero Section */}
-        <section className="relative py-10 md:py-24 bg-card/50 border-b border-white/5 overflow-hidden">
+        <section className="relative pt-6 pb-7 md:pt-8 md:pb-9 bg-card/50 border-b border-white/5 overflow-hidden">
           <div className="absolute inset-0 bg-radial-gradient from-primary/10 via-transparent to-transparent opacity-30" />
           <div className="container mx-auto px-5 md:px-6 relative z-10">
             <Link href="/" className="inline-flex items-center gap-2 text-primary hover:text-white transition-colors mb-6 font-medium group">
@@ -128,10 +55,10 @@ export default function WorksPage() {
           </div>
         </section>
 
-        {/* Filter and Search Section */}
-        <section className="py-7 md:py-12 bg-background">
+        {/* Category Filters */}
+        <section className="pt-5 pb-7 md:pt-6 md:pb-12 bg-background">
           <div className="container mx-auto px-5 md:px-6">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6 mb-5 md:mb-10">
+            <div className="mb-5 md:mb-8 min-w-0">
               <div className="md:hidden">
                 <label htmlFor="work-category" className="mb-2 block text-xs font-medium uppercase tracking-widest text-gray-400">Browse by category</label>
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -148,15 +75,15 @@ export default function WorksPage() {
                 </Select>
               </div>
               {/* Category Pills */}
-              <div className="hidden md:flex flex-wrap gap-2">
+              <div className="hidden md:flex w-full flex-nowrap gap-2 overflow-x-auto py-2 px-1">
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     aria-pressed={selectedCategory === cat}
-                    className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                    className={`shrink-0 whitespace-nowrap px-4 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                       selectedCategory === cat
-                        ? "bg-primary text-black shadow-lg shadow-primary/20 scale-105"
+                        ? "bg-primary text-black shadow-lg shadow-primary/20"
                         : "bg-white/5 text-gray-400 border border-white/5 hover:bg-white/10 hover:text-white"
                     }`}
                   >
@@ -165,18 +92,7 @@ export default function WorksPage() {
                 ))}
               </div>
 
-              {/* Search Box */}
-              <div className="relative max-w-md w-full lg:w-80">
-                <input
-                  type="text"
-                  aria-label="Search portfolio works"
-                  placeholder="Search works..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-12 w-full bg-card border border-white/15 rounded-xl px-4 py-3 pl-11 text-base md:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-all duration-300"
-                />
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-              </div>
+
             </div>
 
             <p role="status" aria-live="polite" className="mb-5 text-xs text-gray-400 md:hidden">
@@ -186,7 +102,7 @@ export default function WorksPage() {
             {filteredWorks.length > 0 ? (
               <motion.div
                 layout
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
               >
                 <AnimatePresence mode="popLayout">
                   {filteredWorks.map((work, idx) => (
@@ -197,7 +113,7 @@ export default function WorksPage() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={{ duration: 0.4, delay: idx * 0.05 }}
-                      className="group relative rounded-xl overflow-hidden aspect-[4/3] bg-card border border-white/5 hover:border-primary/20 transition-all duration-300"
+                      className="group relative rounded-xl overflow-hidden aspect-[6/5] bg-card border border-white/5 hover:border-primary/20 transition-all duration-300"
                     >
                       <img
                         src={work.image}
@@ -234,7 +150,6 @@ export default function WorksPage() {
                 <Button
                   onClick={() => {
                     setSelectedCategory("All");
-                    setSearchQuery("");
                   }}
                   variant="link"
                   className="text-primary mt-2"

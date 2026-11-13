@@ -1,19 +1,9 @@
 import { motion } from "framer-motion";
-import { Search, ArrowRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { latestWorks } from "@/data/latestWorks";
+import { featuredWorks } from "@/data/works";
 import SectionHeading from "@/components/SectionHeading";
-
-const works = [
-  ...latestWorks,
-  { id: 1, title: "Premium Corporate Hoodies", category: "Apparel", image: "/works/print-work-1.jpg" },
-  { id: 2, title: "Large Format Banners", category: "Graphic Design", image: "/works/print-work-2.jpg" },
-  { id: 3, title: "Sleek Business Cards & Stationery", category: "Branding", image: "/works/print-work-3.jpg" },
-  { id: 4, title: "Eco-Friendly Tote Bags", category: "Packaging", image: "/works/print-work-4.jpg" },
-  { id: 5, title: "Custom Printed Mugs", category: "Corporate Gifts", image: "/works/print-work-5.jpg" },
-  { id: 6, title: "Exclusive Hardcover Notebooks", category: "Corporate Gifts", image: "/works/print-work-6.jpg" },
-];
 
 export default function OurWorks() {
   return (
@@ -45,7 +35,7 @@ export default function OurWorks() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {works.slice(0, 9).map((work, idx) => (
+          {featuredWorks.map((work, idx) => (
             <motion.div
               key={work.id}
               initial={{ opacity: 0, scale: 0.95 }}
@@ -54,29 +44,27 @@ export default function OurWorks() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className="group relative rounded-xl overflow-hidden aspect-[4/3] bg-background border border-white/10"
             >
-              <img
-                src={work.image}
-                alt={work.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  <span className="text-xs font-bold text-primary uppercase tracking-wider mb-2 block">
-                    {work.category}
-                  </span>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {work.title}
-                  </h3>
-                  <Link href="/works">
-                    <button
-                      data-testid={`button-work-view-${work.id}`}
-                      className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-colors backdrop-blur-sm mt-4 cursor-pointer"
-                    >
-                      <Search size={18} />
-                    </button>
-                  </Link>
+              <Link
+                href={`/works?category=${encodeURIComponent(work.category)}`}
+                className="relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+                aria-label={`View ${work.category} works`}
+              >
+                <img
+                  src={work.image}
+                  alt={work.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/25 to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-end justify-between gap-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">{work.category}</h3>
+                      <p className="text-sm text-gray-300">{work.title}</p>
+                    </div>
+                    <ArrowUpRight className="shrink-0 text-primary" size={24} />
+                  </div>
                 </div>
-              </div>
+              </Link>
             </motion.div>
           ))}
         </div>
